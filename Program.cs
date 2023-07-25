@@ -19,4 +19,8 @@ app.UseHttpsRedirection();
 
 app.MapMethods(CategoryPost.Template, CategoryPost.Methods, CategoryPost.Handler);
 
+app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handler);
+
+app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handler);
+
 app.Run();

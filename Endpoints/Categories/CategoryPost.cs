@@ -10,17 +10,17 @@ public class CategoryPost
     public static Delegate Handler => Action;
     public static IResult Action(CategoryRequest categoryRequest, ApplicationDbContext Context)
     {
-        var category = new Category
+        var category = new Category(categoryRequest.Name, "test", "test");
+       
+        if (!category.IsValid)
         {
-            Name = categoryRequest.Name,
-            CreatedBy = "Test",
-            CreatedOn = DateTime.Now,
-            EditedBy = "Test",
-            EditedOn = DateTime.Now,
-            Active = true,
-        };
+            return Results.ValidationProblem(category.Notifications.ConvertProblemDetails());
+        }
+            
+
         Context.Categories.Add(category);
         Context.SaveChanges();
+        
         return Results.Created($"/categories/{category.Id}", category.Id);
     }
 }
