@@ -1,7 +1,4 @@
-﻿using IWantApp.Domain.Products;
-using IWantApp.Endpoints.Categories;
-using IWantApp.Infra.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace IWantApp.Endpoints.Employees;
