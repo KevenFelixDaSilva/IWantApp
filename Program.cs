@@ -28,6 +28,10 @@ builder.Services.AddAuthorization(options =>
         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
         .RequireAuthenticatedUser()
         .Build();
+    options.AddPolicy("EmployeePolicy", p =>
+        p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
+    options.AddPolicy("Employee005Policy", p =>
+        p.RequireAuthenticatedUser().RequireClaim("EmployeeCode","005"));
 });
 builder.Services.AddAuthentication(x =>
 {
@@ -41,6 +45,7 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
         ValidIssuer = builder.Configuration["JwtBearerTokenSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtBearerTokenSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(

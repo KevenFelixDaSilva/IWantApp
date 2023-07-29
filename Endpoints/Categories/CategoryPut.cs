@@ -1,7 +1,6 @@
-﻿using IWantApp.Domain.Products;
-using IWantApp.Infra.Data;
+﻿using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Security.Claims;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -10,13 +9,14 @@ public class CategoryPut
     public static string Template => "/Categories/{id:guid}";
     public static string[] Methods => new string[] { HttpMethod.Put.ToString() };
     public static Delegate Handler => Action;
-    public static IResult Action([FromRoute] Guid id,CategoryRequest categoryRequest, ApplicationDbContext Context)
+    public static IResult Action([FromRoute] Guid id,CategoryRequest categoryRequest, HttpContext http, ApplicationDbContext Context)
     {
+        var userId = http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var category = Context.Categories.Where(c => c.Id == id).FirstOrDefault();
         if (category == null) 
             return Results.NotFound();
 
-        category.EditInfo(categoryRequest.Name, categoryRequest.Active);
+        category.EditInfo(categoryRequest.Name, categoryRequest.Active, userId);
 
         if (!category.IsValid)
             return Results.ValidationProblem(category.Notifications.ConvertProblemDetails());
