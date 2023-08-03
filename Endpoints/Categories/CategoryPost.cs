@@ -7,7 +7,7 @@ namespace IWantApp.Endpoints.Categories;
 
 public class CategoryPost
 {
-    public static string Template => "/Categories";
+    public static string Template => "/category";
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handler => Action;
     
@@ -15,7 +15,7 @@ public class CategoryPost
     public static async Task<IResult> Action(CategoryRequest categoryRequest, HttpContext http,ApplicationDbContext Context)
     {
         var userId = http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-        var category = new Category(categoryRequest.Name, "test", "test");
+        var category = new Category(categoryRequest.Name, userId, userId);
        
         if (!category.IsValid)
         {
