@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.IdentityModel.Tokens;
 
 namespace IWantApp.Endpoints.Products;
 
@@ -11,24 +9,23 @@ public class ProductGetShowCase
     public static Delegate Handler => Action;
 
     [AllowAnonymous]
-    public static async Task<IResult> Action(int? page, int? rows, string? orderBy,ApplicationDbContext context)
+    public static async Task<IResult> Action(ApplicationDbContext context, int page = 1, int rows = 10, string orderBy = "name")
     {
-        if (page == null)
-            page = 1;
-        if (rows == null)
-            rows = 10;
-        if (string.IsNullOrEmpty(orderBy))
-            orderBy = "name";
+        if (rows > 10)
+            return Results.Problem(title: "rows with max 10");
 
-        var queryBase = context.Products.Include(p => p.Category)
+        var queryBase = context.Products.AsNoTracking().Include(p => p.Category)
             .Where(p => p.HasStock && p.Category.Active);
 
-        if(orderBy == "name")
+        if (orderBy == "name")
             queryBase = queryBase.OrderBy(p => p.Name);
-        else
+        else if (orderBy == "price")
             queryBase = queryBase.OrderBy(p => p.Price);
+        else
+            return Results.Problem(title: "Order only by price or name", statusCode: 400);
 
-        var queryFilter = queryBase.Skip((page.Value - 1)* rows.Value).Take(rows.Value);
+
+        var queryFilter = queryBase.Skip((page - 1)* rows).Take(rows);
         var products = queryFilter.ToList();
 
         var response = products.Select(p => new ProductResponse(p.Name, p.Category , p.Description, p.HasStock, p.Price ,p.Active));
