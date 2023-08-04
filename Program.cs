@@ -1,4 +1,5 @@
 using IWantApp.Endpoints.Categories;
+using IWantApp.Endpoints.Clients;
 using IWantApp.Endpoints.Employees;
 using IWantApp.Endpoints.Products;
 using IWantApp.Endpoints.Security;
@@ -70,6 +71,7 @@ builder.Services.AddAuthentication(x =>
 });
 
 builder.Services.AddScoped<QueryAllUsersWithClaimName>();
+builder.Services.AddScoped<UserCreator>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -98,6 +100,8 @@ app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.H
 app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Handler);
 app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handler);
 app.MapMethods(ProductGetShowCase.Template, ProductGetShowCase.Methods, ProductGetShowCase.Handler);
+
+app.MapMethods(ClientPost.Template, ClientPost.Methods, ClientPost.Handler);
 
 app.UseExceptionHandler("/error");
 
