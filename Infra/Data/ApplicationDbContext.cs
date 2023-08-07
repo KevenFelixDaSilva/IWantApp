@@ -1,9 +1,12 @@
-﻿namespace IWantApp.Infra.Data;
+﻿using IWantApp.Domain.Orders;
+
+namespace IWantApp.Infra.Data;
 
 public class ApplicationDbContext: IdentityDbContext<IdentityUser>
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -22,7 +25,16 @@ public class ApplicationDbContext: IdentityDbContext<IdentityUser>
 
         Builder.Entity<Category>()
             .Property(p => p.Name).IsRequired();
-        
+
+
+        Builder.Entity<Order>()
+            .Property(p => p.ClientId).IsRequired();
+        Builder.Entity<Order>()
+            .Property(p => p.DeliveryAddress).IsRequired();
+        Builder.Entity<Order>()
+            .HasMany(p => p.Products)
+            .WithMany(p => p.Orders)
+            .UsingEntity(p => p.ToTable("OrderProducts"));
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configuration) 

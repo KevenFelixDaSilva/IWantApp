@@ -102,6 +102,7 @@ app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handler);
 app.MapMethods(ProductGetShowCase.Template, ProductGetShowCase.Methods, ProductGetShowCase.Handler);
 
 app.MapMethods(ClientPost.Template, ClientPost.Methods, ClientPost.Handler);
+app.MapMethods(ClientGet.Template, ClientGet.Methods, ClientGet.Handler);
 
 app.UseExceptionHandler("/error");
 

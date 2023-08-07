@@ -28,23 +28,6 @@ public class ClientPost
         if (!result.identity.Succeeded)
             return Results.ValidationProblem(result.identity.Errors.ConvertProblemDetails());
 
-        //var newUser = new IdentityUser { UserName = clientRequest.Name, Email = clientRequest.Email };
-        //var result = await userManager.CreateAsync(newUser);
-
-        //if (!result.Succeeded)
-        //    return Results.ValidationProblem(result.Errors.ConvertProblemDetails());
-
-        //var userClaim = new List<Claim>()
-        //{
-        //    new Claim("Cpf", clientRequest.Cpf),
-        //    new Claim("Name", clientRequest.Name),
-        //};
-
-        //var claimResult = await userManager.AddClaimsAsync(newUser, userClaim);
-
-        //if(!claimResult.Succeeded)
-        //    return Results.BadRequest(claimResult.Errors.First());
-
         return Results.Created($"/clients/{result.userId}", result.userId);
     }
 }
