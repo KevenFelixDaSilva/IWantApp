@@ -16,7 +16,7 @@ public class ClientGet
         var result = new
         {
             Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
-            //Cpf = user.Claims.First(c => c.Type == "Cpf").Value,
+            Cpf = user.Claims.First(c => c.Type == "Cpf").Value,
             Name = user.Claims.First(c => c.Type == "Name").Value,         
         };
 
